@@ -3,14 +3,14 @@ import {Link, NavLink} from 'react-router-dom'
 
 const TopBar = () => {
   return (
-    <nav className="navbar is-dark" role="navigation" aria-label="main navigation">
+    <nav className="navbar is-dark">
       <div className="navbar-brand">
-        <Link to="/" className="navbar-item is-size-3">Newborn</Link>
+        <Link to="/" className="navbar-item is-size-3">NEWS SITE</Link>
       </div>
       <div className="navbar-menu">
         <div className="navbar-end">
-          <NavLink to="/register" className="navbar-item">Регистрация</NavLink>
-          <NavLink to="/login" className="navbar-item">Вход</NavLink>
+          <NavLink to="/" className="navbar-item">Главная</NavLink>
+          <NavLink to="/profile/123" className="navbar-item">Профиль</NavLink>
         </div>
       </div>
     </nav>
