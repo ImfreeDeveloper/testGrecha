@@ -1,5 +1,8 @@
 import React from 'react'
 import {BrowserRouter} from 'react-router-dom'
+import { Provider } from 'react-redux'
+
+import store from './store'
 
 import Routes from './routes'
 import TopBar from './components/topBar';
@@ -10,8 +13,10 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <TopBar />
-        <Routes />
+        <Provider store={store}>
+          <TopBar />
+          <Routes />
+        </Provider>
       </BrowserRouter>
     </>
   )
