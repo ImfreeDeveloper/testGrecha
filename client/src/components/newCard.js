@@ -1,6 +1,7 @@
 import React from 'react'
+import {NavLink} from 'react-router-dom'
 
-const newCard = ({ title, image, datetime }) => {
+const NewCard = ({ id, title, image, datetime }) => {
   return (
     <div className="column is-4">
       <div className="card">
@@ -10,7 +11,7 @@ const newCard = ({ title, image, datetime }) => {
           </div>
         </div>
         <div className="card-content">
-          <p className="title is-4">{ title }</p>
+          <NavLink to={`/new/${id}`} className="title is-4">{ title }</NavLink>
           <div className="content">
           <p>{ datetime }</p>
           </div>
@@ -20,4 +21,4 @@ const newCard = ({ title, image, datetime }) => {
   )
 }
 
-export default newCard;
+export default NewCard;

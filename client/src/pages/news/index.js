@@ -11,6 +11,9 @@ const News = () => {
   const isLoaded = useSelector(({ news }) => news.isLoaded)
 
   useEffect(() => {
+    if (isLoaded) {
+      return
+    }
     dispatch(fetchNews())
   }, [dispatch])
 

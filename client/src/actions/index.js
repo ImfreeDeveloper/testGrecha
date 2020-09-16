@@ -22,10 +22,6 @@ export const fetchNews = () => async dispatch => {
 
   } catch (err) {
     console.log(err);
-    dispatch({
-      type: SET_LOADED,
-      payload: false
-    })
   }
 
 }
