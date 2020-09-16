@@ -8,6 +8,7 @@ import { fetchNews } from '../../actions'
 const News = () => {
   const dispatch = useDispatch()
   const items = useSelector(({ news }) => news.items)
+  const isLoaded = useSelector(({ news }) => news.isLoaded)
 
   useEffect(() => {
     dispatch(fetchNews())
@@ -18,11 +19,16 @@ const News = () => {
   return (
     <div className="container">
       <div className="columns is-multiline">
-        <NewCard />
-        <NewCard />
-        <NewCard />
-        <NewCard />
-        <NewCard />
+        {
+          isLoaded
+            ? items.map(item => (
+                <NewCard
+                  key={item.id}
+                  { ...item }
+                />
+              ))
+            : <p>xcv</p>
+        }
       </div>
       <div className="columns">
         <div className="column ">
