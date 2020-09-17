@@ -1,74 +1,72 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react'
+import {NavLink} from 'react-router-dom'
 
-const Comment = ({children}) => {
+import { dateFormat } from '../helpers'
+
+import {
+  fetchUser as fetchUserApi
+} from '../api'
+
+const Comment = ({ comment }) => {
+  let children = null;
+  if (comment.children && comment.children.length) {
+    children = (
+      <>
+        {comment.children.map(item => (
+          <Comment comment={item} key={item.id} />
+        ))}
+      </>
+    );
+  }
+
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        // Автор
+        const dataUser = await fetchUserApi(comment.authorId)
+        setUser(dataUser.data)
+        setIsLoaded(true)
+      } catch (err) {
+        setIsLoaded(true)
+      }
+    }
+    fetchData();
+  }, [comment.authorId])
+
   return (
-    <article className="media">
-      <div className="media-left">
-        <p className="image is-64x64">
-          <img src="https://bulma.io/images/placeholders/128x128.png" />
-        </p>
-      </div>
-      <div className="media-content">
-        <div className="content">
-          <p><strong>Barbara Middleton</strong><br />19.09.2020</p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies
-                    elit blandit non. Suspendisse pellentesque mauris sit amet dolor blandit rutrum. Nunc in tempus turpis.
-          <br />
-        </div>
-        { children }
-      </div>
-    </article>
-  );
+    <>
+      {
+        isLoaded && comment
+          ? (
+            <article className="media">
+              <div className="media-left">
+                <p className="image is-64x64">
+                  <img src="https://bulma.io/images/placeholders/128x128.png" alt={user.firstName} />
+                </p>
+              </div>
+              <div className="media-content">
+                <div className="content">
+                  <p>
+                    <strong>
+                      <NavLink to={`/profile/${user.id}`} className="title is-6">{user.firstName} {user.lastName}</NavLink>
+                    </strong>
+                    <br />
+                    { dateFormat(comment.datetime) }
+                  </p>
+                  <p dangerouslySetInnerHTML={{__html: comment.comment }}></p>
+                  <br />
+                </div>
+                { children }
+              </div>
+            </article>
+          )
+          : null
+      }
+    </>
+  )
 }
 
-export default Comment;
-
-
-// const items = [
-//   {
-//     id: 1,
-//     name: "Папка 1",
-//     values: [
-//       {
-//         id: 2,
-//         name: "Подпапка 1",
-//         values: [
-//           {
-//             id: 3,
-//             name: "Подпапка 2"
-//           },
-//           {
-//             id: 4,
-//             name: "Подпапка 3",
-//             values: []
-//           }
-//         ]
-//       },
-//       {
-//         id: 5,
-//         name: "Папка 2",
-//         values: []
-//       }
-//     ]
-//   }
-// ];
-
-// function ListItem({ item }) {
-//   let children = null;
-//   if (item.values && item.values.length) {
-//     children = (
-//       <ul>
-//         {item.values.map(i => (
-//           <ListItem item={i} key={i.id} />
-//         ))}
-//       </ul>
-//     );
-//   }
-
-//   return (
-//     <li>
-//       {item.name}
-//       {children}
-//     </li>
-//   );
-// }
+export default Comment

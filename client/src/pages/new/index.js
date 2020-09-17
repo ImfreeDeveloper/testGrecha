@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react'
+import {NavLink} from 'react-router-dom'
 
 import {
   fetchNew as fetchNewApi,
   fetchUser as fetchUserApi,
   fetchComments as fetchCommentsApi,
 } from '../../api'
-import Comment from '../../components/comment'
+import ListComments from '../../components/listComments'
+import { dateFormat } from '../../helpers'
 
 const New = ({ match }) => {
   const slug = match.params.slug
-  const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [newItem, setNew] = useState({});
   const [user, setUser] = useState({});
@@ -30,44 +31,35 @@ const New = ({ match }) => {
         setIsLoaded(true)
       } catch (err) {
         setIsLoaded(true)
-        setError(error)
       }
     }
     fetchData();
-  }, [])
-
-
+  }, [slug])
 
   return (
     <div className="container">
       {
-          isLoaded
+          isLoaded && newItem
             ?
               <>
                 <div className="card">
                   <div className="card-content">
                     <h1 className="title is-1">{ newItem.title }</h1>
-                    <p className="title is-4">{user.firstName} {user.lastName}</p>
-                    <p>{ newItem.datetime }</p>
+                    <NavLink to={`/profile/${user.id}`} className="title is-4">{user.firstName} {user.lastName}</NavLink>
+                    <p>{ dateFormat(newItem.datetime) }</p>
                   </div>
                   <div className="card-image">
-                    <div className="image is-4by3">
                       <img src={ newItem.image } alt={ newItem.title } />
-                    </div>
                   </div>
-                  <div className="card-content" dangerouslySetInnerHTML={{__html: newItem.description }}></div>
+                  <div className="card-content" dangerouslySetInnerHTML={{__html: newItem.description }} />
                 </div>
                 <div className="card mt-6">
                   <div className="card-content">
-                    <Comment>
-                      <Comment/>
-                      <Comment/>
-                    </Comment>
-                    <Comment/>
+                    <ListComments comments={comments} />
                   </div>
                 </div>
               </>
-            : <p>xcv</p>
+            : null
       }
 
     </div>
